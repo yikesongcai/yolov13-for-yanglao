@@ -1,8 +1,8 @@
 # Ultralytics YOLO 🚀, AGPL-3.0 license
-# Builds ultralytics/ultralytics:latest-cpu image on DockerHub https://hub.docker.com/r/ultralytics/ultralytics
-# Image is CPU-optimized for ONNX, OpenVINO and PyTorch YOLO11 deployments
+# YOLOv13 CPU Inference Service - FastAPI based REST API
+# Simplified for CPU-only inference deployment
 
-# Use official Python base image for reproducibility (3.11.10 for export and 3.12.6 for inference)
+# Use official Python base image
 FROM python:3.11.10-slim-bookworm
 
 # Set environment variables
@@ -11,42 +11,41 @@ ENV PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1 \
     PIP_BREAK_SYSTEM_PACKAGES=1
 
-# Downloads to user config dir
-ADD https://github.com/ultralytics/assets/releases/download/v0.0.0/Arial.ttf \
-    https://github.com/ultralytics/assets/releases/download/v0.0.0/Arial.Unicode.ttf \
-    /root/.config/Ultralytics/
+# Downloads to user config dir (fonts for visualization)
+#ADD https://github.com/ultralytics/assets/releases/download/v0.0.0/Arial.ttf \
+#    https://github.com/ultralytics/assets/releases/download/v0.0.0/Arial.Unicode.ttf \
+#    /root/.config/Ultralytics/
 
-# Install linux packages
-# g++ required to build 'tflite_support' and 'lap' packages, libusb-1.0-0 required for 'tflite_support' package
+# Install linux packages (minimal for inference only)
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    python3-pip git zip unzip wget curl htop libgl1 libglib2.0-0 libpython3-dev gnupg g++ libusb-1.0-0 \
+    libgl1 libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
 # Create working directory
 WORKDIR /ultralytics
 
-# Copy contents and configure git
+# Copy contents
 COPY . .
-RUN sed -i '/^\[http "https:\/\/github\.com\/"\]/,+1d' .git/config
-ADD https://github.com/ultralytics/assets/releases/download/v8.3.0/yolo11n.pt .
 
-# Install pip packages
+# Install pip packages (CPU-only PyTorch + ultralytics + FastAPI dependencies)
 RUN pip install uv
-RUN uv pip install --system -e ".[export]" --extra-index-url https://download.pytorch.org/whl/cpu --index-strategy unsafe-first-match
+ENV UV_HTTP_TIMEOUT=600
 
-# Run exports to AutoInstall packages
-RUN yolo export model=tmp/yolo11n.pt format=edgetpu imgsz=32
-RUN yolo export model=tmp/yolo11n.pt format=ncnn imgsz=32
-# Requires Python<=3.10, bug with paddlepaddle==2.5.0 https://github.com/PaddlePaddle/X2Paddle/issues/991
-RUN uv pip install --system "paddlepaddle>=2.6.0" x2paddle
+# Install ultralytics with CPU-only PyTorch (no export extras needed for inference)
+RUN uv pip install --system -e . --extra-index-url https://download.pytorch.org/whl/cpu --index-strategy unsafe-first-match
 
-# Remove extra build files
-RUN rm -rf tmp /root/.config/Ultralytics/persistent_cache.json
+# Install FastAPI service dependencies and huggingface_hub (required by ultralytics)
+RUN pip install --no-cache-dir fastapi uvicorn[standard] python-multipart huggingface_hub
 
-# Set default command to bash
-CMD ["/bin/bash"]
+# Download YOLOv13n model for inference (pre-download to avoid startup delay)
+RUN python -c "from ultralytics import YOLO; YOLO('yolov13n.pt')"
 
+# Expose port
+EXPOSE 8000
+
+# Start the FastAPI service
+CMD ["python", "examples/YOLOv13-FastAPI-REST-API/yolov13_fastapi_api.py"]
 # Usage Examples -------------------------------------------------------------------------------------------------------
 
 # Build and Push
