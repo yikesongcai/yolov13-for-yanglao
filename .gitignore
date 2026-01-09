@@ -4,3 +4,7 @@ datasets
 *.jpg
 *.jpeg
 *.pt
+__pycache__/
+*.pyc
+*.pyo
+*.pyd

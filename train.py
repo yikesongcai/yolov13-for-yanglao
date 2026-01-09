@@ -4,7 +4,7 @@ def main():
     # 1. 加载模型
     # 推荐使用 'yolov8n.pt' 或 'yolov10n.pt' 作为预训练权重（Transfer Learning）
     # 如果你的 yolov13 是自定义库，请替换为对应的类
-    model = YOLO('tmp/yolov13n.pt')
+    model = YOLO('yolov13n.pt')
 
     # 2. 训练模型
     results = model.train(

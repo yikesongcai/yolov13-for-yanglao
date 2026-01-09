@@ -2,7 +2,7 @@ from ultralytics import YOLO
 import os
 import sys
 
-def batch_predict(model_path, source_path, save_dir='runs/predict'):
+def batch_predict(model_path, source_path, save_dir='E:\programming\PythonProject\yolov13\\runs\predict'):
     # 1. 加载模型
     model = YOLO(model_path)
 
@@ -13,16 +13,16 @@ def batch_predict(model_path, source_path, save_dir='runs/predict'):
         conf=0.25, 
         save=True, 
         project=save_dir, 
-        name='batch_test',
+        name='test',
         exist_ok=True
     )
 
-    print(f"Prediction completed. Results are saved in {os.path.join(save_dir, 'batch_test')}")
+    print(f"Prediction completed. Results are saved in {os.path.join(save_dir, 'test')}")
 
 if __name__ == '__main__':
-    model_weight = 'runs/detect/my_yolo_exp5/weights/best.pt'
+    model_weight = 'E:\programming\PythonProject\yolov13\yolov13n.pt'
     # 用户提供的路径
-    test_dir = r"E:\programming\yanglao_dataset\door\for testing\image"
+    test_dir = r"E:\programming\PythonProject\yolov13\datasets\for testing"
     
     if os.path.exists(test_dir):
         batch_predict(model_weight, test_dir)

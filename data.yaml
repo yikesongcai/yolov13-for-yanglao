@@ -1,14 +1,9 @@
-# data.yaml 内容示例
-
-# 训练集和验证集的绝对路径或相对路径
-path: E:\programming\PythonProject\yolov13\datasets\door  # 数据集根目录
+path: E:\programming\PythonProject\yolov13\datasets\merged_data
 train: images/train
 val: images/val
-# test: images/test # 如果有测试集可加上
 
-# 类别数量
-nc: 1  # 例如你有两个类别：hat, person
-
-# 类别名称（必须和 labelImg 中的 classes.txt 顺序一致）
+nc: 3
 names:
-  0: door
+  0: person
+  1: door
+  2: aircondition
