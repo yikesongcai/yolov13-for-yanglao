@@ -2,7 +2,12 @@ path: E:\programming\PythonProject\yolov13\datasets\merged_data
 train: images/train
 val: images/val
 
-nc: 2
+nc: 7
 names:
   0: door
   1: aircondition
+  2: glucometer
+  3: scissors
+  4: nail_clipper
+  5: bucket
+  6: cleaning_agent
