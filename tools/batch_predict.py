@@ -20,7 +20,7 @@ def batch_predict(model_path, source_path, save_dir='E:\programming\PythonProjec
     print(f"Prediction completed. Results are saved in {os.path.join(save_dir, 'test')}")
 
 if __name__ == '__main__':
-    model_weight = 'E:\\programming\\PythonProject\\yolov13\\runs\\detect\\my_yolo_exp5\\weights\\best.pt'
+    model_weight = 'E:\\programming\\PythonProject\\yolov13\\runs\\detect\\my_yolo_exp6\\weights\\best.pt'
     # 用户提供的路径
     test_dir = r"E:\\programming\\PythonProject\\yolov13\\datasets\\for testing"
     
