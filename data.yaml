@@ -1,8 +1,8 @@
-path: E:\programming\PythonProject\yolov13\datasets\merged_data
+path: E:\programming\PythonProject\yolov13\datasets
 train: images/train
 val: images/val
 
-nc: 7
+nc: 8
 names:
   0: door
   1: aircondition
@@ -11,3 +11,4 @@ names:
   4: nail_clipper
   5: bucket
   6: cleaning_agent
+  7: person
