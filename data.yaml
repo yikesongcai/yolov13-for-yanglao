@@ -2,7 +2,7 @@ path: E:\programming\PythonProject\yolov13\datasets
 train: images/train
 val: images/val
 
-nc: 8
+nc: 9
 names:
   0: door
   1: aircondition
